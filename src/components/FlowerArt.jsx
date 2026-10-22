@@ -687,7 +687,6 @@ export default function FlowerArt({ type = 'rose', color = 'red', size = 200, sw
         originX: '50%',
         originY: '96%',
         overflow: 'visible',
-        filter: 'drop-shadow(0 12px 18px rgba(0,0,0,.16))',
       }}
       animate={sway ? { rotate: [-1.6, 1.6, -1.6] } : undefined}
       transition={sway ? { duration: 5, repeat: Infinity, ease: 'easeInOut' } : undefined}

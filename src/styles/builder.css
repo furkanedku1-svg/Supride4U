@@ -418,6 +418,104 @@
   flex-shrink: 0;
 }
 
+/* Teaser giriş satırı (ipucu mesajı ve sıfırlama) */
+.teaser-input-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  width: 100%;
+}
+.teaser-input-row input {
+  flex: 1;
+  min-width: 0;
+}
+.btn-reset-teaser {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+@media (max-width: 480px) {
+  .teaser-input-row {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 6px;
+  }
+  .btn-reset-teaser {
+    align-self: flex-end;
+  }
+}
+
+/* ----- Hazır Fotoğraf Şablonları Seçimi ----- */
+.photo-tpl-panel {
+  padding: 14px 16px;
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
+}
+.photo-tpl-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+  gap: 8px;
+  margin-top: 6px;
+}
+.photo-tpl-btn {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 10px;
+  border-radius: 14px;
+  border: 1.5px solid color-mix(in srgb, var(--ink) 14%, transparent);
+  background: rgba(255, 255, 255, 0.65);
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.builder[data-dark='1'] .photo-tpl-btn {
+  background: rgba(255, 255, 255, 0.08);
+}
+.photo-tpl-btn:hover:not(:disabled) {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 12%, transparent);
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(var(--shadow-rgb), 0.2);
+}
+.photo-tpl-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.photo-tpl-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15);
+}
+.photo-tpl-label {
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.25;
+  color: var(--ink);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+@media (max-width: 560px) {
+  .photo-tpl-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 6px;
+  }
+  .photo-tpl-btn {
+    padding: 6px 8px;
+    gap: 6px;
+  }
+  .photo-tpl-thumb {
+    width: 28px;
+    height: 28px;
+  }
+  .photo-tpl-label {
+    font-size: 0.76rem;
+  }
+}
+
 /* ----- fotoğraflar ----- */
 .dropzone {
   display: grid;
@@ -1127,13 +1225,98 @@
   .sheet-scrim { display: block; position: fixed; inset: 0; z-index: 85; background: rgba(20, 10, 30, 0.4); }
 }
 @media (max-width: 560px) {
+  .b-grid {
+    padding: 6px 12px 140px; /* Alttaki fab ve navigasyon butonlarının alt içeriği örtmesini engeller */
+  }
+  .panel {
+    padding: 16px 12px 20px;
+    border-radius: 20px;
+  }
   .two { grid-template-columns: 1fr; }
   .seg { grid-template-columns: 1fr; }
-  .step-dot { width: 36px; height: 36px; font-size: 0.95rem; }
-  .stepper-track { left: 16px; right: 16px; }
+
+  /* Adım göstergesi (Stepper) mobil uyumu */
+  .stepper {
+    margin-bottom: 16px;
+    gap: 4px;
+    justify-content: space-between;
+  }
+  .step-dot {
+    width: 33px;
+    height: 33px;
+    font-size: 0.88rem;
+  }
+  .stepper-track {
+    left: 14px;
+    right: 14px;
+  }
+
+  .step-head {
+    margin-bottom: 14px;
+  }
+  .step-head h2 {
+    font-size: clamp(1.2rem, 5vw, 1.45rem);
+    line-height: 1.25;
+  }
+  .step-head p {
+    font-size: 0.86rem;
+    line-height: 1.4;
+  }
+
+  /* Hediye seçim kartları (Tema, Çiçek, Peluş, Müzik) mobilde dengeli 2 sütun */
+  .cards-flower,
+  .cards-plush,
+  .cards-theme {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 10px;
+  }
+  .cards-music {
+    grid-template-columns: 1fr;
+    gap: 10px;
+  }
+  .card {
+    padding: 12px 8px;
+    border-radius: 16px;
+  }
+  .card-title {
+    font-size: 0.88rem;
+  }
+  .card-sub {
+    font-size: 0.74rem;
+  }
+
+  /* Alt paneller (subpanel) ve alt başlıklar */
+  .subpanel {
+    padding: 14px 12px;
+    gap: 10px;
+    border-radius: 16px;
+  }
+  .field-label {
+    font-size: 0.88rem;
+  }
+  .field-hint {
+    font-size: 0.76rem;
+  }
+  .flower-palette {
+    padding: 14px 12px;
+    border-radius: 16px;
+  }
+  .flower-variants-grid {
+    gap: 8px;
+  }
+  .variant-pill {
+    padding: 6px 12px;
+    font-size: 0.82rem;
+    gap: 6px;
+  }
+
   .link-box { flex-direction: column; }
-  .photo-row { grid-template-columns: 52px 1fr; }
-  .photo-row img { width: 52px; height: 52px; }
+  .photo-row { grid-template-columns: 48px 1fr; gap: 8px; }
+  .photo-row img { width: 48px; height: 48px; }
   .row-actions { grid-column: 1 / -1; justify-content: flex-end; }
-  .btn-lg { padding: 0 22px; }
+  .btn-lg { padding: 0 20px; font-size: 1rem; }
+  .step-nav {
+    margin-top: 22px;
+    padding-top: 14px;
+  }
 }

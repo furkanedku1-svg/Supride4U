@@ -10,6 +10,7 @@ import {
   PLUSH_VARIANTS,
   DEFAULT_TEASERS,
 } from '../data/options'
+import { PHOTO_TEMPLATES } from '../data/photoTemplates'
 import FlowerArt from '../components/FlowerArt'
 import PlushArt from '../components/PlushArt'
 import QRCodeCard from '../components/QRCodeCard'
@@ -197,7 +198,7 @@ export function StepFlower({ gift, upd, updIn }) {
           label="🎁 Çiçek Açılış Mesajı (İpucu)"
           hint="Kutudan çiçekler çıkmadan önce alıcıya gösterilir (silerseniz yazı gösterilmez)"
         >
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div className="teaser-input-row">
             <input
               type="text"
               maxLength="90"
@@ -208,8 +209,7 @@ export function StepFlower({ gift, upd, updIn }) {
             {gift.teasers?.flower !== DEFAULT_TEASERS.flower && (
               <button
                 type="button"
-                className="btn btn-ghost btn-sm"
-                style={{ whiteSpace: 'nowrap' }}
+                className="btn btn-ghost btn-sm btn-reset-teaser"
                 onClick={() => updIn('teasers', { flower: DEFAULT_TEASERS.flower })}
                 title="Varsayılana döndür"
               >
@@ -328,7 +328,7 @@ export function StepPlush({ gift, updIn }) {
               label="🎁 Peluş Açılış Mesajı (İpucu)"
               hint="Kutudan peluş oyuncak çıkmadan önce alıcıya gösterilir (silerseniz yazı gösterilmez)"
             >
-              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="teaser-input-row">
                 <input
                   type="text"
                   maxLength="90"
@@ -339,8 +339,7 @@ export function StepPlush({ gift, updIn }) {
                 {gift.teasers?.plush !== DEFAULT_TEASERS.plush && (
                   <button
                     type="button"
-                    className="btn btn-ghost btn-sm"
-                    style={{ whiteSpace: 'nowrap' }}
+                    className="btn btn-ghost btn-sm btn-reset-teaser"
                     onClick={() => updIn('teasers', { plush: DEFAULT_TEASERS.plush })}
                     title="Varsayılana döndür"
                   >
@@ -429,11 +428,37 @@ export function StepPhotos({ gift, upd, updIn }) {
         <small>{photos.length}/{MAX_PHOTOS} · Fotoğraflar link için otomatik küçültülür</small>
       </div>
 
+      {/* Hazır Fotoğraf Şablonları (Link Boyutunu Korur) */}
+      <div className="subpanel photo-tpl-panel">
+        <div className="field">
+          <span className="field-label">✨ Hazır Anı Şablonları (Tavsiye Edilen · Linki Hafif Tutar)</span>
+          <span className="field-hint">Tek dokunuşla ekle; link boyutunu şişirmez ve WhatsApp'ta bölünmeyi önler</span>
+        </div>
+        <div className="photo-tpl-grid">
+          {PHOTO_TEMPLATES.map((tpl) => (
+            <button
+              key={tpl.id}
+              type="button"
+              className="photo-tpl-btn"
+              onClick={() => {
+                if (room <= 0) return
+                upd('photos', [...photos, { src: tpl.src, note: tpl.defaultNote, tpl: tpl.id }])
+              }}
+              disabled={room <= 0}
+              title={tpl.name}
+            >
+              <img src={tpl.src} alt={tpl.name} className="photo-tpl-thumb" />
+              <span className="photo-tpl-label">{tpl.emoji} {tpl.name}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
       <div className="url-add">
         <input type="url" inputMode="url" placeholder="veya fotoğraf bağlantısı (https://…)" value={url} onChange={(e) => setUrl(e.target.value)} onKeyDown={(e) => e.key === 'Enter' && addUrl()} />
         <button type="button" className="btn btn-soft" onClick={addUrl} disabled={!/^https?:\/\//i.test(url.trim()) || room <= 0}>Ekle</button>
       </div>
-      <p className="note small">İpucu: Kendi çizimlerin ve URL ile eklenen fotoğraflar paylaşım linkini hafif tutar.</p>
+      <p className="note small">İpucu: Hazır şablonlar, çizimler ve görsel URL'leri link boyutunu çok küçük tutarak her platformda sorunsuz açılmasını sağlar.</p>
 
       <div className="photo-list">
         {photos.map((p, i) => (
@@ -457,7 +482,7 @@ export function StepPhotos({ gift, upd, updIn }) {
           label="🎁 Fotoğraflar Açılış Mesajı (İpucu)"
           hint="Kutudan fotoğraflar fırlamadan önce alıcıya gösterilir (silerseniz yazı gösterilmez)"
         >
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div className="teaser-input-row">
             <input
               type="text"
               maxLength="90"
@@ -468,8 +493,7 @@ export function StepPhotos({ gift, upd, updIn }) {
             {gift.teasers?.photos !== DEFAULT_TEASERS.photos && (
               <button
                 type="button"
-                className="btn btn-ghost btn-sm"
-                style={{ whiteSpace: 'nowrap' }}
+                className="btn btn-ghost btn-sm btn-reset-teaser"
                 onClick={() => updIn('teasers', { photos: DEFAULT_TEASERS.photos })}
                 title="Varsayılana döndür"
               >
@@ -512,7 +536,7 @@ export function StepLetter({ gift, upd, updIn }) {
           label="🎁 Mektup Açılış Mesajı (İpucu)"
           hint="Kutudan mektup çıkmadan önce alıcıya gösterilir (silerseniz yazı gösterilmez)"
         >
-          <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+          <div className="teaser-input-row">
             <input
               type="text"
               maxLength="90"
@@ -523,8 +547,7 @@ export function StepLetter({ gift, upd, updIn }) {
             {gift.teasers?.letter !== DEFAULT_TEASERS.letter && (
               <button
                 type="button"
-                className="btn btn-ghost btn-sm"
-                style={{ whiteSpace: 'nowrap' }}
+                className="btn btn-ghost btn-sm btn-reset-teaser"
                 onClick={() => updIn('teasers', { letter: DEFAULT_TEASERS.letter })}
                 title="Varsayılana döndür"
               >

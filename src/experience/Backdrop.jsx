@@ -4,17 +4,20 @@ const SHAPES = ['✦', '❤', '✿', '✧', '●', '❀']
 
 // Tema renklerine uyumlu, yavaşça süzülen parçacıklar
 export default function Backdrop() {
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 640
+  const count = isMobile ? 8 : 16
+
   const items = useMemo(
     () =>
-      Array.from({ length: 18 }, (_, i) => ({
+      Array.from({ length: count }, (_, i) => ({
         s: SHAPES[i % SHAPES.length],
-        left: (i * 53) % 100,
-        size: 12 + ((i * 7) % 20),
-        dur: 14 + ((i * 5) % 14),
-        delay: -((i * 3) % 20),
-        drift: ((i * 37) % 60) - 30,
+        left: (i * (100 / count) + 4) % 94,
+        size: 13 + ((i * 7) % 18),
+        dur: 15 + ((i * 5) % 12),
+        delay: -((i * 3) % 15),
+        drift: ((i * 37) % 50) - 25,
       })),
-    [],
+    [count],
   )
   return (
     <div className="backdrop" aria-hidden="true">

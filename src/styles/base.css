@@ -145,6 +145,32 @@ button:disabled {
   font-size: 0.9rem;
 }
 
+/* ===== Buton ve Etkileşim Dokunma Optimizasyonu ===== */
+button,
+.btn,
+.card,
+.step-dot,
+.giftbox,
+.desk-item,
+.variant-pill,
+.switch-row,
+.photo-choice-btn {
+  touch-action: manipulation;
+}
+
+/* ===== Donanım İvmelendirmesi (Hardware Acceleration) ===== */
+.stage,
+.desk,
+.desk-item,
+.box-layer,
+.spotlight-prompt-wrap,
+.unbox-controls,
+.panel {
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+}
+
 /* ===== Arka plan: degrade + parıltılı parçacıklar ===== */
 .backdrop {
   position: fixed;
@@ -160,6 +186,8 @@ button:disabled {
   border-radius: 50%;
   filter: blur(60px);
   opacity: 0.55;
+  transform: translateZ(0);
+  will-change: transform;
 }
 .backdrop-glow.g1 {
   background: radial-gradient(circle, var(--box-light), transparent 65%);
@@ -184,6 +212,7 @@ button:disabled {
   bottom: -40px;
   color: var(--accent);
   opacity: 0;
+  will-change: transform, opacity;
   animation: floatUp linear infinite;
 }
 @keyframes floatUp {
@@ -191,6 +220,22 @@ button:disabled {
   10% { opacity: 0.35; }
   90% { opacity: 0.25; }
   100% { transform: translate(var(--drift, 0), -115vh) rotate(360deg); opacity: 0; }
+}
+
+/* Mobil Performans Optimizasyonları: Düşük GPU yükü, hafif blur ve akıcı 60fps */
+@media (max-width: 768px) {
+  .glass {
+    -webkit-backdrop-filter: blur(8px) saturate(1.2);
+    backdrop-filter: blur(8px) saturate(1.2);
+    background: color-mix(in srgb, var(--glass) 90%, rgba(255, 255, 255, 0.4));
+  }
+  .backdrop-glow {
+    filter: blur(30px);
+    width: 70vmax;
+    height: 70vmax;
+    opacity: 0.42;
+    animation: none; /* Mobilde aşırı GPU ısınmasını ve kare atlamasını önler */
+  }
 }
 
 /* ===== Ses dalgası göstergesi ===== */

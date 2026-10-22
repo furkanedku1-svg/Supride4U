@@ -203,6 +203,15 @@
   box-shadow: 0 8px 24px rgba(var(--shadow-rgb), 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
   user-select: none;
   -webkit-tap-highlight-color: transparent;
+  animation: btnPulse 2s ease-in-out infinite;
+}
+@keyframes btnPulse {
+  0%, 100% {
+    box-shadow: 0 8px 24px rgba(var(--shadow-rgb), 0.45), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
+  50% {
+    box-shadow: 0 12px 30px rgba(var(--shadow-rgb), 0.68), inset 0 1px 0 rgba(255, 255, 255, 0.35);
+  }
 }
 .unbox-btn-icon {
   font-size: 1.25rem;
@@ -936,4 +945,77 @@
   .paper { padding: 28px 20px 20px 38px; }
   .paper::before { left: 28px; }
   .exit-test { top: 12px; left: 12px; }
+
+  /* Mobilde hediye kutusu ve kontrol öğelerinin masadaki hediyeleri örtmesini önleme */
+  .box-docked {
+    width: min(42vw, 155px);
+  }
+  .box-layer.docked {
+    padding-bottom: max(6px, env(safe-area-inset-bottom, 6px));
+  }
+  .unbox-controls {
+    gap: 8px;
+    margin-bottom: 8px;
+    width: min(94vw, 360px);
+  }
+  .unbox-teaser-card {
+    padding: 8px 16px;
+    border-radius: 18px;
+    box-shadow: 0 8px 24px rgba(var(--shadow-rgb), 0.22);
+  }
+  .teaser-badge {
+    font-size: 0.68rem;
+    padding: 2px 9px;
+    margin-bottom: 3px;
+  }
+  .teaser-text {
+    font-size: 0.94rem;
+    line-height: 1.35;
+  }
+  .btn-unbox-next {
+    padding: 10px 20px;
+    font-size: 0.92rem;
+    gap: 8px;
+  }
+  .unbox-btn-icon {
+    font-size: 1.15rem;
+  }
+
+  /* Spotlight mobil kontrol ve boyutlandırma */
+  .spotlight-prompt-wrap {
+    bottom: max(10vh, 75px);
+    padding: 0 12px;
+  }
+  .spotlight-prompt {
+    padding: 10px 18px;
+    font-size: 0.95rem;
+    gap: 8px;
+  }
+  .spotlight-prompt-icon {
+    font-size: 1.25rem;
+  }
+  .spotlight-prompt-text {
+    font-size: 0.9rem;
+  }
+  .spotlight-prompt-action {
+    font-size: 0.86rem;
+    padding: 4px 12px;
+  }
+
+  /* Masa üst başlık ipucu */
+  .desk-hint {
+    top: 10px;
+    font-size: 0.82rem;
+    padding: 7px 15px;
+    max-width: 92vw;
+  }
+
+  /* Teşekkür alanı mobilde alt barın altında kalmasın */
+  .thanks {
+    padding: 0 16px;
+    margin-bottom: max(40px, env(safe-area-inset-bottom, 40px));
+  }
+  .thanks-text {
+    font-size: 1.25rem;
+  }
 }

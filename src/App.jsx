@@ -5,14 +5,18 @@ import ErrorBoundary from './components/ErrorBoundary'
 import { readGiftFromHash } from './lib/codec'
 import { SAMPLE_MOCK_GIFT } from './data/options'
 
-// Hash'te #g=... varsa alıcı deneyimi, yoksa hediye oluşturucu açılır.
+// URL'de #data=... veya #g=... (veya ?data=...) varsa alıcı deneyimi, yoksa hediye oluşturucu açılır.
 export default function App() {
   const [route, setRoute] = useState(readGiftFromHash)
 
   useEffect(() => {
     const on = () => setRoute(readGiftFromHash())
     window.addEventListener('hashchange', on)
-    return () => window.removeEventListener('hashchange', on)
+    window.addEventListener('popstate', on)
+    return () => {
+      window.removeEventListener('hashchange', on)
+      window.removeEventListener('popstate', on)
+    }
   }, [])
 
   useEffect(() => {
@@ -47,7 +51,7 @@ export default function App() {
 
   return (
     <ErrorBoundary onFallback={() => setRoute({ present: true, gift: SAMPLE_MOCK_GIFT })}>
-      <Experience key={window.location.hash} gift={route.gift} />
+      <Experience key={window.location.hash || window.location.search || 'exp'} gift={route.gift} />
     </ErrorBoundary>
   )
 }

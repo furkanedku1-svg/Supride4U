@@ -697,10 +697,9 @@ export default function PlushArt({
         width={size}
         height={Math.round((size * 220) / 200)}
         style={{ display: 'block', overflow: 'visible' }}
-        filter="drop-shadow(0 10px 18px rgba(0,0,0,0.12))"
       >
         {/* Zemin Yumuşak Peluş Gölgesi */}
-        <ellipse cx="100" cy="202" rx="58" ry="12" fill="#000000" opacity="0.12" />
+        <ellipse cx="100" cy="202" rx="58" ry="12" fill="#000000" opacity="0.14" />
         <Component color={color} />
       </svg>
     </motion.div>

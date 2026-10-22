@@ -1,5 +1,5 @@
-// Fotoğrafı tarayıcıda küçültüp JPEG data-URL'e çevirir — link boyutunu makul tutmak için.
-export function fileToSmallDataUrl(file, maxSide = 300, quality = 0.55) {
+// Fotoğrafı tarayıcıda küçültüp JPEG data-URL'e çevirir — URL boyutunu hafif ve güvenli tutmak için.
+export function fileToSmallDataUrl(file, maxSide = 180, quality = 0.45) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader()
     reader.onerror = reject

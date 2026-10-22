@@ -31,13 +31,13 @@ const rnd = (i, s = 1) => {
 // Masanın yerleşimi: fotoğraflar üstte rastgele eğik, çiçek, peluş (isteğe bağlı) ve zarf altta.
 function layoutDesk(W, H, n, hasPlush = false) {
   const mobile = W < 560
-  const pw = Math.round(Math.max(116, Math.min(mobile ? W * 0.4 : W * 0.19, 190)))
+  const pw = Math.round(Math.max(98, Math.min(mobile ? W * 0.36 : W * 0.19, 180)))
   const ph = pw * 1.2
   const cols = mobile ? 2 : Math.min(4, Math.max(2, Math.ceil(n / 2)))
   const rows = n ? Math.ceil(n / cols) : 0
   const cellW = W / cols
-  const cellH = ph * 0.92
-  const top = 84
+  const cellH = ph * 0.88
+  const top = mobile ? 62 : 84
 
   const photos = Array.from({ length: n }, (_, i) => {
     const r = Math.floor(i / cols)
@@ -45,24 +45,24 @@ function layoutDesk(W, H, n, hasPlush = false) {
     const inRow = r === rows - 1 ? n - r * cols : cols
     const offset = ((cols - inRow) * cellW) / 2
     return {
-      x: offset + c * cellW + cellW / 2 + (rnd(i, 1) - 0.5) * cellW * 0.14 - pw / 2,
-      y: top + r * cellH + (rnd(i, 2) - 0.5) * cellH * 0.1,
-      rot: (rnd(i, 3) - 0.5) * 16,
+      x: offset + c * cellW + cellW / 2 + (rnd(i, 1) - 0.5) * cellW * 0.12 - pw / 2,
+      y: top + r * cellH + (rnd(i, 2) - 0.5) * cellH * 0.08,
+      rot: (rnd(i, 3) - 0.5) * 14,
     }
   })
 
-  const zoneY = top + rows * cellH + (rows ? 36 : 40)
-  const fw = Math.round(Math.min(mobile ? W * (hasPlush ? 0.38 : 0.4) : (hasPlush ? 175 : 200), 210))
-  const plw = Math.round(Math.min(mobile ? W * 0.38 : 175, 200))
-  const ew = Math.round(Math.min(mobile ? (hasPlush ? Math.min(W * 0.72, 230) : W * 0.42) : 230, 240))
+  const zoneY = top + rows * cellH + (rows ? (mobile ? 22 : 36) : (mobile ? 18 : 36))
+  const fw = Math.round(Math.min(mobile ? (hasPlush ? W * 0.35 : W * 0.38) : (hasPlush ? 175 : 200), 200))
+  const plw = Math.round(Math.min(mobile ? W * 0.35 : 175, 190))
+  const ew = Math.round(Math.min(mobile ? (hasPlush ? Math.min(W * 0.68, 220) : W * 0.44) : 230, 240))
 
   let flower, plush, envelope, zoneBottom
 
   if (hasPlush) {
     if (mobile) {
-      flower = { x: W * 0.28 - fw / 2, y: zoneY, w: fw, h: fw * 1.25 }
-      plush = { x: W * 0.72 - plw / 2, y: zoneY + 6, w: plw, h: plw * 1.15 }
-      envelope = { x: W * 0.5 - ew / 2, y: zoneY + Math.max(flower.h, plush.h) + 18, w: ew, h: ew * 0.64 }
+      flower = { x: W * 0.28 - fw / 2, y: zoneY, w: fw, h: fw * 1.2 }
+      plush = { x: W * 0.72 - plw / 2, y: zoneY + 4, w: plw, h: plw * 1.1 }
+      envelope = { x: W * 0.5 - ew / 2, y: zoneY + Math.max(flower.h, plush.h) + 14, w: ew, h: ew * 0.64 }
       zoneBottom = envelope.y + envelope.h
     } else {
       flower = { x: W * 0.22 - fw / 2, y: zoneY, w: fw, h: fw * 1.3 }
@@ -71,12 +71,21 @@ function layoutDesk(W, H, n, hasPlush = false) {
       zoneBottom = zoneY + Math.max(flower.h, plush.h, envelope.h + 44)
     }
   } else {
-    flower = { x: W * (mobile ? 0.27 : 0.33) - fw / 2, y: zoneY, w: fw, h: fw * 1.3 }
-    envelope = { x: W * (mobile ? 0.73 : 0.67) - ew / 2, y: zoneY + 44, w: ew, h: ew * 0.66 }
-    zoneBottom = zoneY + Math.max(flower.h, envelope.h + 44)
+    // Peluş yoksa mobilde çiçek ve zarf yan yana yerleşir; dikeyde taşmayı ve kutunun altında kalmayı önler
+    if (mobile) {
+      flower = { x: W * 0.28 - fw / 2, y: zoneY, w: fw, h: fw * 1.2 }
+      envelope = { x: W * 0.72 - ew / 2, y: zoneY + 18, w: ew, h: ew * 0.64 }
+      zoneBottom = zoneY + Math.max(flower.h, envelope.h + 18)
+    } else {
+      flower = { x: W * 0.33 - fw / 2, y: zoneY, w: fw, h: fw * 1.3 }
+      envelope = { x: W * 0.67 - ew / 2, y: zoneY + 44, w: ew, h: ew * 0.66 }
+      zoneBottom = zoneY + Math.max(flower.h, envelope.h + 44)
+    }
   }
 
-  const contentH = zoneBottom + 190
+  // Alttaki dock kontrolü ve kutu için mobilde yeterli boşluk bırakılır
+  const bottomMargin = mobile ? 270 : 190
+  const contentH = zoneBottom + bottomMargin
   const shift = Math.max(0, (H - contentH) / 2)
   const place = (o) => (o ? { ...o, y: o.y + shift } : null)
 
@@ -87,7 +96,7 @@ function layoutDesk(W, H, n, hasPlush = false) {
     flower: place(flower),
     plush: place(plush),
     envelope: place(envelope),
-    thanksY: zoneBottom + 50 + shift,
+    thanksY: zoneBottom + 40 + shift,
     deskH: Math.max(H, contentH),
   }
 }
@@ -350,7 +359,7 @@ export default function UnboxStage({ gift, theme }) {
 
   // Geometri hesaplayıcı (Spotlight -> Masa geçişi)
   const cx = vp.w / 2
-  const cy = Math.max(160, Math.min(vp.h * 0.38, 320))
+  const cy = Math.max(130, Math.min(vp.h * 0.32, 290))
   const bx = vp.w / 2
   const by = vp.h - 90
 
@@ -365,9 +374,9 @@ export default function UnboxStage({ gift, theme }) {
     const boxRelX = bx - itemCenterX
     const boxRelY = by - itemCenterY
 
-    // Spotlight ölçeği: Ekranda öne çıkması için belirgin ve büyük
-    const targetSpotW = Math.min(vp.w * 0.78, 320)
-    const spotScale = Math.min(Math.max(1.4, targetSpotW / Math.max(w, 1)), 2.2)
+    // Spotlight ölçeği: Ekranda öne çıkması için belirgin ve mobil ekran sınırlarına uygun
+    const targetSpotW = Math.min(vp.w * 0.72, 280)
+    const spotScale = Math.min(Math.max(1.3, targetSpotW / Math.max(w, 1)), 2.0)
 
     return {
       motionProps: {
@@ -426,7 +435,7 @@ export default function UnboxStage({ gift, theme }) {
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
-      style={{ overflowY: allRevealed ? 'auto' : 'hidden' }}
+      style={{ overflowY: open ? 'auto' : 'hidden' }}
     >
       {/* Spotlight karartma ve odak katmanı */}
       <AnimatePresence>
@@ -542,16 +551,6 @@ export default function UnboxStage({ gift, theme }) {
                 onClick={revealNext}
                 whileHover={{ scale: 1.05 }}
                 whileTap={{ scale: 0.95 }}
-                animate={{
-                  boxShadow: [
-                    '0 6px 20px rgba(var(--shadow-rgb), 0.35)',
-                    '0 10px 28px rgba(var(--shadow-rgb), 0.65)',
-                    '0 6px 20px rgba(var(--shadow-rgb), 0.35)',
-                  ],
-                }}
-                transition={{
-                  boxShadow: { duration: 1.8, repeat: Infinity, ease: 'easeInOut' },
-                }}
               >
                 <span className="unbox-btn-icon">{nextItem.emoji}</span>
                 <span className="unbox-btn-label">{nextItem.label}</span>
